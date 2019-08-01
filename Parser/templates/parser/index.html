@@ -7,7 +7,7 @@
 <body>
 <textarea rows="10" cols="50" disabled>
 {% for request in requests %}
-{{ request.handling_time|date:"d.m.Y h:m:s" }}:&nbsp;{{ request.url }}&#13;
+{{ request.handling_time|date:"d.m.Y h:m:s" }}:&nbsp;{{ request.url }}&nbsp;{{ request.is_success }}&#13;
 {% empty %}
 No requests
 {% endfor %}

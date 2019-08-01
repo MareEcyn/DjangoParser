@@ -5,7 +5,7 @@ from django.db import models
 
 class Request(models.Model):
 	url = models.URLField('parsing URL')
-	handling_time = models.DateTimeField('handling time')
+	handling_time = models.DateTimeField('handling time', default=datetime.now())
 
 	def __str__(self):
 		return self.url

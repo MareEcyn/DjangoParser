@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .models import Request, ParseResult
 
 def index(request):
-	requests = Request.objects.all()
+	requests = Request.objects.all().order_by('-handling_time')
 	results = ParseResult.objects.all()
 	context = {
 		'requests': requests,
