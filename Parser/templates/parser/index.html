@@ -1,1 +1,26 @@
-crya
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<textarea rows="10" cols="50" disabled>
+{% for request in requests %}
+{{ request.handling_time|date:"d.m.Y h:m:s" }}:&nbsp;{{ request.url }}&#13;
+{% empty %}
+No requests
+{% endfor %}
+</textarea>
+<textarea rows="10" cols="50" disabled>
+{% for result in results %}
+{{ result.request.url }}
+{% if not result.is_empty %}
+&nbsp;-&nbsp;{{ result.encoding }},&nbsp;{{ result.title }},&nbsp;{{ result.h1 }}
+{% endif %}
+{% empty %}
+No results
+{% endfor %}
+</textarea>
+</body>
+</html>
