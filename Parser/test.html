@@ -1,0 +1,575 @@
+
+
+
+<!DOCTYPE html>
+
+
+<html lang="ru-RU">
+<head>
+<meta charset="UTF-8"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1"/>      
+<link rel="icon" href="//www.ibm.com/favicon.ico"/>
+<link rel="canonical" href="http://www.ibm.com/developerworks/ru/library/l-python_part_6/index.html"/>
+<meta name="geo.country" content="RU"/>
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2017"/>
+<meta name="dcterms.date" content="2017-06-02"/>
+<meta name="description" content="Основные свойства ООП — полиморфизм, наследование, инкапсуляция. Класс — это пользовательский тип, состоящий из методов и атрибутов. Инстанс класса создается путем вызова имени класса как функции с параметрами. Объект состоит из атрибутов и методов. Атрибут — это переменная, метод — это функция. Отличия метода от функции в том, что у него есть первый параметр — self. Полиморфизм позволяет нам работать с различными типами объектов так, что нам не нужно задумываться о том, к какому типу они принадлежат."/>	
+<meta name="keywords" content="Linux, Python, tttosca, tttlca"/>
+<meta name="robots" content="index,follow"/>
+<title>Программирование на Python: Часть 6. Классы</title>
+    
+<script> 
+    digitalData = {
+        "page":{
+            "category":{
+                "primaryCategory":"SOFDCOSRRU"
+            },
+            "pageInfo":{
+                "effectiveDate":"2017-06-02",
+                "language":"ru-RU",
+                "publishDate":"2017-06-02",
+                "publisher":"IBM Corporation",
+                "version":"v18",
+                "ibm":{ 
+                    "contentDelivery":"IBM developerWorks template",
+                    "contentProducer":"IBM developerWorks",
+                    "country":"RU",
+                    "owner":"RuAdmin DeveloperWorks/Russia/IBM",
+                    "siteID":"DEVWRKS",
+                    "subject":"TT400",
+                    "type":"CT316",
+                    "topic":"Python",
+                    "topicId":"46",
+                    "contentArea":"opensource,linux",
+                    "contentAreaId":"7,2",
+                    "contentType":"article",
+                    "contentId":"512105",
+                },
+                "keywords":"Linux, Python, tttosca, tttlca",
+                "description":"Основные свойства ООП — полиморфизм, наследование, инкапсуляция. Класс — это пользовательский тип, состоящий из методов и атрибутов. Инстанс класса создается путем вызова имени класса как функции с параметрами. Объект состоит из атрибутов и методов. Атрибут — это переменная, метод — это функция. Отличия метода от функции в том, что у него есть первый параметр — self. Полиморфизм позволяет нам работать с различными типами объектов так, что нам не нужно задумываться о том, к какому типу они принадлежат."
+            }
+        }
+    };
+    window._analytics = {
+        "coremetrics": false,
+        "optimizely": false,
+        "googleAddServices": false,
+        "addRoll": false,
+        "intercom": false,
+        "fullStory": false,
+        "hotjar": false,
+        "tealeaf": false,
+        "nps": false,
+        "segment_key": 'HU3dbkAG5wE0F1IkRf9S1RexlAqo3jby'
+    };
+</script>
+	
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:site" content="@developerworks"/>
+<meta property="og:title" content="Программирование на Python: Часть 6. Классы"/>
+<meta property="og:description" content="Основные свойства ООП — полиморфизм, наследование, инкапсуляция. Класс — это пользовательский тип, состоящий из методов и атрибутов. Инстанс класса создается путем вызова имени класса как функции с параметрами. Объект состоит из атрибутов и методов. Атрибут — это переменная, метод — это функция. Отличия метода от функции в том, что у него есть первый параметр — self. Полиморфизм позволяет нам работать с различными типами объектов так, что нам не нужно задумываться о том, к какому типу они принадлежат."/>
+    <meta property="og:image" content="http://www.ibm.com/developerworks/i/dw-social-201508.png"/>
+<!-- Segment meta tag -->
+<meta name="segment" property="developerWorks (developerWorks)" productTitle="developerWorks" value="Open Source Russian (developerWorks)"/>      
+<!-- SITE MON : START (DO NOT DELETE) -->
+<!-- developerWorks monitoring token -->
+<!-- SITE MON : END (DO NOT DELETE) -->
+
+<!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+<!-- <script src="//cdn.optimizely.com/js/5399420604.js"></script> -->
+<!-- BEGIN: Use this section to set page specific variables for the Page Tag -->
+<script language="JavaScript">var NTPT_PGEXTRA="ibmSkillLevel=3&ibmCmaId=512105&ibmContentAreas=opensource,linux";</script>
+<!--END -->
+<script src="//1.www.s81c.com/common/stats/ida_stats.js"></script>
+<link href="//1.www.s81c.com/common/v18/css/www.css" rel="stylesheet">
+<link href="//1.www.s81c.com/common/v18/css/syntaxhighlighter.css" rel="stylesheet">
+<script src="//1.www.s81c.com/common/v18/js/www.js"></script>
+<script src="//1.www.s81c.com/common/v18/js/syntaxhighlighter.js"></script>    
+<link href="//1.www.s81c.com/common/v18/css/tables.css" rel="stylesheet">
+<script src="//1.www.s81c.com/common/v18/js/tables.js"></script>   
+<!--  Masthead/footer  -->
+<link href="//dw1.s81c.com/developerworks/css/dw-mf/v18/dw-mf-v18.css?v=111618" rel="stylesheet">
+<!-- <link href="//dw1.s81c.com/developerworks/css/dw-mf/v18/alt-signedin-ux.css" rel="stylesheet" /> -->   
+<!--[if lt IE 9]>
+    <link href="//dw1.s81c.com/developerworks/css/dw-mf/v18/dw-mf-ie8fix.css?v=022216" rel="stylesheet" />
+<![endif]-->
+<link href="//dw1.s81c.com/developerworks/css/v18/dw-article.css?v=012418" rel="stylesheet">
+<script src="//dw1.s81c.com/developerworks/js/v18/dw-auth-properties.js?v=041017"></script>
+<script src="//dw1.s81c.com/developerworks/js/v18/dw-auth.js?v=031119"></script>
+<script src="//dw1.s81c.com/developerworks/js/dw-mf/v18/dw-mf.js?v=050618"></script>
+<script src="//dw1.s81c.com/developerworks/js/v18/dw-include.js"></script>     
+<script src="//dw1.s81c.com/developerworks/js/v18/dw-article.js?v=050818"></script>
+<script src="//dw1.s81c.com/developerworks/js/v18/dw-auto-links.js?v=121217"></script>     
+<script src="//www.ibm.com/software/info/js/tactic.js"></script>
+<script src="//www.ibm.com/software/info/js/tacticbindlinks.js"></script>
+
+<!-- 
+<PageMap>
+    <DataObject type="document">
+        <Attribute name="topic">Python</Attribute>
+        <Attribute name="topicId">46</Attribute>
+        <Attribute name="contentArea">opensource,linux</Attribute>
+        <Attribute name="contentAreaId">7,2</Attribute>
+        <Attribute name="abstract">Основные свойства ООП — полиморфизм, наследование, инкапсуляция. Класс — это пользовательский тип, состоящий из методов и атрибутов. Инстанс класса создается путем вызова имени класса как функции с параметрами. Объект состоит из атрибутов и методов. Атрибут — это переменная, метод — это функция. Отличия метода от функции в том, что у него есть первый параметр — self. Полиморфизм позволяет нам работать с различными типами объектов так, что нам не нужно задумываться о том, к какому типу они принадлежат.</Attribute>
+        <Attribute name="pub.date">2017-06-02</Attribute>
+        <Attribute name="contentType">article</Attribute>
+    </DataObject>
+</PageMap>
+-->        
+
+</head>
+<body id="ibm-com" class="ibm-type dw-js-disabled">
+	
+<div id="ibm-top" class="ibm-landing-page">
+
+<!-- MASTHEAD_BEGIN -->
+<div id="ibm-masthead" role="banner" aria-label="IBM">
+    <div id="ibm-universal-nav">    
+  
+        <nav role="navigation" aria-label="IBM">
+            <div id="ibm-home"><a href="https://www.ibm.com/ru/ru/">IBM®</a></div>
+            <ul id="ibm-menu-links" role="toolbar" aria-label="Карта сайта">
+                <li><a href="https://www.ibm.com/sitemap/ru/ru/">Карта сайта</a></li>
+            </ul> 
+        </nav>
+  
+        <div id="ibm-search-module" role="search" aria-labelledby="ibm-masthead">
+            <form id="ibm-search-form" action="https://www.ibm.com/Search/" method="get">
+                <p>
+                    <label for="q">IBM</label>
+                    <input type="text" maxlength="100" value="" placeholder="Поиск" name="q" id="q" aria-label="Поиск IBM Developer"/>
+                    <input type="hidden" value="utf" name="en"/>
+                    <input type="hidden" value="ru" name="lang"/>
+                    <input type="hidden" value="ru" name="cc"/>
+                    <input type="hidden" value="20" name="nr"/>
+                    <input type="hidden" value="For developers" name="tabType[0]"/>
+                    <input type="submit" id="ibm-search" class="ibm-btn-search" value="Отправить"/>
+                </p>
+            </form>
+        </div>
+       
+    </div>
+</div><!-- MASTHEAD_END -->
+	    
+<!-- LAYOUT -->
+<div id="ibm-content-wrapper">
+    <!-- LEADSPACE_BEGIN -->
+    <header role="banner" aria-labelledby="ibm-pagetitle-h1">
+        
+        <!-- MASTHEAD_SITENAV_BEGIN -->
+        <div class="ibm-sitenav-menu-container">
+    <div class="ibm-sitenav-menu-name">
+        <a href="//www.ibm.com/developerworks/ru/">IBM Developer</a>
+    </div>
+    <div class="ibm-sitenav-menu-list">
+        <ul role="menubar">
+            <li role="presentation">
+                <a href="//www.ibm.com/developerworks/ru/topics/" role="menuitem">Изучайте</a>
+            </li>
+            <li role="presentation">       
+                <a href="//www.ibm.com/developerworks/ru/downloads/" role="menuitem">Разрабатывайте</a>
+            </li>
+            <li role="presentation">       
+                <a href="//www.ibm.com/developerworks/ru/community/" role="menuitem">Подключайтесь</a>
+            </li>       
+        </ul>
+    </div>
+</div>
+<!-- BEGIN IBM DEVELOPER BANNER -->
+<style>
+    #dw-mast-banner {
+        background: #000;
+        box-sizing: border-box;
+    }
+    #dw-mast-banner.ibm-band, #dw-mast-strip.ibm-band { padding: 0; }
+    #dw-mast-banner p { color: #ffffff; margin-left: 1rem; display: inline-block; text-decoration: none; font-size: 1.125rem; }
+    #dw-mast-banner .dw-mast-banner-cta { padding-left: 10px; color: #ed1c24; }
+    #dw-mast-banner .dw-mast-banner-cta::after { content: "\003e"; color: #ed1c24; font-size: 0.875rem; padding-left: 4px; }
+    #dw-mast-banner img { display: inline-block; vertical-align: middle; margin-top: -4px; }
+    #dw-mast-banner .dw-mast-banner-img { margin-left: 16px; } 
+    #dw-mast-strip {
+        background: #56d3d0;
+        box-sizing: border-box;
+    }
+    #dw-mast-strip p { padding: 10px 20px 10px; margin-left: 2rem; color: #000; display: block; text-decoration: none; font-size: 0.875rem; }
+    
+    @media only screen and (max-width:800px) {
+        #dw-mast-banner p { margin-right: 1rem; }
+    }
+    @media only screen and (max-width:525px) {
+        #dw-mast-banner .dw-mast-banner-cta { padding-left: 4px; }
+    }
+</style>
+<div id="dw-mast-banner" class="ibm-band" style="text-align: center">
+    <a href="https://www.ibm.com/ru-ru/cloud/redhat">
+        <div style="display:inline-block">
+            <img src="https://dw1.s81c.com/developerworks/i/dw-ibmred.png" height="60" width="201" alt="IBM and Red Hat logos"/>
+            <p class="ibm-plex-sans-semibold">IBM и Red Hat - новая глава открытых инноваций. <span class="dw-mast-banner-cta ibm-plex-sans-semibold">Узнать&nbsp;больше</span></p>
+        </div>
+    </a>
+</div>
+<div id="dw-mast-strip" class="ibm-band" style="text-align: center">
+    <div>        
+        <p>Этот сайт больше не обновляется и не поддерживается. Содержание предоставляется "как есть". Учитывая 
+            быстрое развитие технологий, некоторые материалы, код или иллюстрации могут к настоящему моменту измениться.</p>         
+    </div>    
+</div>
+<!-- <style>
+    #dw-mast-banner {
+        background-color: #e9e9e9;
+        /* background-color: #000; */
+        /* min-height: 75px; */
+    }
+    #dw-mast-banner.ibm-band { padding: 0; }
+    #dw-mast-banner .ibm-columns { padding: 0; min-height: 100px; }
+    #dw-mast-banner .dw-mast-banner-txt { padding: 10px 0 0; margin-left: 2rem; color: #4ca7a5; display: inline; }
+    #dw-mast-banner .dw-mast-banner-cta { padding: 14px 0 0 20px; margin-right: 2rem; color: #4ca7a5; display: inline; }
+    #dw-mast-banner .dw-mast-banner-txt p.ibm-h4 { font-size: 1.125rem; color: #1e1e1e; }
+    #dw-mast-banner .dw-mast-banner-txt a { color: #1e1e1e; }
+    #dw-mast-banner .dw-mast-banner-txt span { white-space: nowrap; }
+    #dw-mast-banner .dw-mast-banner-txt a { text-decoration: none; }
+    /* #dw-mast-banner .dw-mast-banner-txt a:hover { text-decoration: underline; } */
+    #dw-mast-banner .ibm-btn-pri {
+        background-color: #000;
+        border: 1px solid #4ca7a5;
+        color: #4ca7a5;
+    }
+    #dw-mast-banner .ibm-btn-pri:hover {
+        background-color: #4ca7a5;
+        color: #fff;
+    }
+    @media only screen and (max-width:1100px) {
+        #dw-mast-banner .dw-mast-banner-cta { padding: 10px 0 0 20px; }
+        #dw-mast-banner .dw-mast-banner-txt p.ibm-h4 { font-size: 1.0rem; }
+    }
+    @media only screen and (max-width:999px) {
+        #dw-mast-banner .dw-mast-banner-txt { margin-left: 0.5rem; } 
+        #dw-mast-banner .dw-mast-banner-cta { margin-right: 0.5rem; }
+    }
+    @media only screen and (max-width:959px) {
+        #dw-mast-banner .dw-mast-banner-txt { margin-left: 2rem; } 
+        #dw-mast-banner .dw-mast-banner-cta { margin-right: 2rem; }
+        #dw-mast-banner .ibm-btn-pri { white-space: nowrap; font-size: .875rem; }
+        #dw-mast-banner .dw-mast-banner-txt p.ibm-h4 {
+            font-size: .9375rem;
+            text-align: center;
+            font-weight: 400;
+        }
+    }
+    @media only screen and (max-width:600px) {
+        #dw-mast-banner .dw-mast-banner-txt { margin-left: 1rem; } 
+        #dw-mast-banner .dw-mast-banner-cta { margin-right: 1rem; }
+    }
+    @media only screen and (max-width:579px) {
+        #dw-mast-banner .dw-mast-banner-txt, #dw-mast-banner .dw-mast-banner-cta { display: block; }
+        #dw-mast-banner .dw-mast-banner-txt { margin-left: 1rem; margin-right: 1rem; } 
+        #dw-mast-banner .dw-mast-banner-cta { margin-right: 0; text-align: center; }
+        #dw-mast-banner .dw-mast-banner-txt p.ibm-h4 { padding: 0; }
+        #dw-mast-banner .dw-mast-banner-cta { padding: 10px 0 0 0; }
+    } 
+</style>
+<div id="dw-mast-banner" class="ibm-band">
+    <div class="ibm-vertical-center">
+        <div class="ibm-center-block ibm-vertical-center">
+            <div class="dw-mast-banner-txt ibm-plex-sans-regular">
+                <p class="ibm-h4">Этот сайт больше не обновляется и не поддерживается. Содержание предоставляется "как есть". Учитывая 
+                    быстрое развитие технологий, некоторые материалы, код или иллюстрации могут к настоящему моменту измениться.</p>        
+            </div>
+        </div>
+    </div>
+</div> -->        <!-- MASTHEAD_SITENAV_END -->
+        
+        <!-- NAVIGATION_TRAIL_BEGIN -->
+        <div id="ibm-leadspace-head" class="ibm-alternate">
+            <div id="ibm-leadspace-body">
+                <nav aria-label="Breadcrumb" role="navigation">                     
+                                <ul id="dw-navigation-trail" itemscope="" itemtype="http://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://www.ibm.com/developerworks/ru/topics/"><span itemprop="name">Изучайте</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://www.ibm.com/developerworks/ru/opensource/"><span itemprop="name">Open source</span></a><meta itemprop="position" content="2"/></li></ul>
+                </nav>
+            </div>
+        </div>
+        <!-- NAVIGATION_TRAIL_END -->
+        
+    </header>
+    <!-- LEADSPACE_END -->
+    
+    <!-- MAIN_CONTENT_BEGIN -->
+    <main role="main" aria-labelledby="ibm-pagetitle-h1"> 
+        <div id="ibm-pcon">
+            <!-- BEGIN_IBM-CONTENT -->
+            <div id="ibm-content">
+                <!-- BEGIN_IBM-CONTENT-BODY -->
+                <div id="ibm-content-body">
+                    <!-- BEGIN_IBM-CONTENT-MAIN -->
+                    <div id="ibm-content-main" class="dw-article">                        
+                        <!-- BEGIN_INTERIOR-COLUMNS -->
+                                <div class="ibm-columns dw-article-toc">
+                                    <!-- LEFT_6_2_CONTENT_COLUMN_BEGIN -->  
+                                    <div id="dw-article-toc-container" class="ibm-col-6-2">
+                                        <div id="dw-article-toc-body">
+                                            <h2>Содержание</h2><div class="ibm-alternate-rule"><hr/></div><ul role="directory" aria-label="Содержание" class="ibm-plain-list"><li><a href="#ibm-pagetitle-h1">Введение</a></li><li><a href="#N10086">1. Что такое класс</a></li><li><a href="#N100A2"> 2. Атрибуты класса</a></li><li><a href="#N100EA">3. self</a></li><li><a href="#N100F9"> 4. Наследование</a></li><li><a href="#N10121">5. Пример</a></li><li><a href="#N10168">Заключение</a></li><li><a href="#artdownload">Ресурсы для скачивания</a></li><li><a href="#icomments">Комментарии</a></li></ul>
+                                        </div>
+                                    </div>
+                                    <!-- LEFT_6_2_CONTENT_COLUMN_END -->
+                                    
+                                    <!-- CENTER_6_4_CONTENT_COLUMN_BEGIN -->
+                                    <div class="ibm-col-6-4">
+                                        <h1 id="ibm-pagetitle-h1" class="ibm-h1">Программирование на Python: Часть 6. Классы</h1>
+                                        <!-- Article Top Bar -->
+                                                <div class="ibm-columns dw-article-topbar">
+                                                    <!-- Author and article info. -->
+                                                    <div class="ibm-col-6-2 ibm-col-medium-6-4 dw-article-metadata">
+                                                        <div class="dw-article-avatar"><img width="42" height="42" src="//dw1.s81c.com/developerworks/i/v18/article/dw-author.png" alt=""/></div><div class="dw-article-authordate">Сергей Яковлев<br /><span class="dw-article-pubdate">Опубликовано 02.06.2017</span></div>
+                                                    </div>
+                                                    <!-- Social -->
+                                                    <div class="ibm-col-6-2 ibm-col-medium-6-4 ibm-col-small-6-2 dw-article-social">
+                                                        <!-- Sharing links -->
+                                                        <div id="dw-article-share-inline">
+                                                            <div class="dw-article-sharelink-inline">
+                                                                <div class="ibm-sharethispage"></div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Number of comments and link to comments -->
+                                                        <div id="dw-article-cmts">
+                                                            <div class="dw-article-cmtslink">
+                                                                <a onclick="tocLink('#icomments')" href="#icomments" role="link" tabindex="0" aria-label="Comments">
+                                                                    <img src="//dw1.s81c.com/developerworks/i/v18/article/dw-article-cmt-icon.png" width="29" height="29" alt="Comments"/>
+                                                                </a>
+                                                            </div>
+                                                            <div class="dw-article-cmtslink">
+                                                                <a onclick="tocLink('#icomments')" href="#icomments" role="link" tabindex="0">
+                                                                    <div id="nCmts"></div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+<div id="dw-series-container"><h3 class="ibm-h3" id="dw-series-heading">Серия контента:</h3><div data-widget="showhide" data-type="panel" class="ibm-show-hide"><h2 id="dw-series-show-hide">Этот контент является частью <span id="dw-series-part">#</span> из серии <span id="dw-series-total">#</span> статей: <span id="dw-series-title"/></h2><div class="ibm-container-body" id="dw-series-links">https://www.ibm.com/developerworks/ru/library/?series_title_by=**auto**</div><div id="dw-not-all-published">Следите за выходом новых статей этой серии.</div></div><div id="dw-series-alt"><h2>Этот контент является частью  серии:<span id="dw-series-title-alt"/></h2><p>Следите за выходом новых статей этой серии.</p></div></div>
+                                        <!-- Article Body -->
+                                        
+                                        <p>Мы переходим к одной из самых интересных тем цикла — объектно-ориентированному программированию (ООП) в Python. С точки зрения ООП, класс представляет собой коллекцию данных. Использование классов дает нам прежде всего преимущества абстрактного подхода в программировании.</p><ol><li><strong>Полиморфизм</strong>: в разных объектах одна и та же операция может выполнять различные функции. Слово «полиморфизм» имеет греческую природу и означает «имеющий многие формы». Простым примером полиморфизма может служить функция <code>count()</code>, выполняющая одинаковое действие для различных типов обьектов: <code>'abc'.count('a')</code> и <code>[1, 2, 'a'].count('a')</code>. Оператор плюс полиморфичен при сложении чисел и при сложении строк.</li><li><strong>Инкапсуляция</strong>: можно скрыть ненужные внутренние подробности работы объекта от окружающего мира. Это второй основной принцип абстракции. Он основан на использовании атрибутов внутри класса. Атрибуты могут иметь различные состояния в промежутках между вызовами методов класса, вследствие чего сам объект данного класса также получает различные состояния — state.</li><li><strong>Наследование</strong>: можно создавать специализированные классы на основе базовых. Это позволяет нам избегать написания повторного кода. </li><li><strong>Композиция</strong>: объект может быть составным и включать в себя другие объекты.</li></ol><p>Объектно-ориентированный подход в программировании подразумевает следующий алгоритм действий.</p><ol><li>Описывается проблема с помощью обычного языка с использованием понятий, действий, прилагательных.</li><li>На основе понятий формулируются классы.</li><li>На основе действий проектируются методы.</li><li>Реализуются методы и атрибуты.</li></ol><p>Мы получили скелет — объектную модель. На основе этой модели реализуется наследование. Для проверки модели:</p><ol class="ibm-roman-list" type="i"><li>пишется так называемый use cases — сценарий возможного поведения модели, где проверяется вся функциональность;</li><li>функционал при этом может быть исправлен либо добавлен. </li></ol><p>Объектно-ориентированный подход хорош там, где проект подразумевает долгосрочное развитие, состоит из большого количества библиотек и внутренних связей. </p><p>Механизм классов языка Python представляет собой смесь механизмов классов C++ и Modula-3. Наиболее важные особенности классов в питоне: </p><ol class="ibm-alpha-list" type="a"><li>множественное наследование;</li><li>производный класс может переопределить любые методы базовых классов; </li><li>в любом месте можно вызвать метод с тем же именем базового класса; </li><li>все атрибуты класса в питоне по умолчанию являются public, т.е. доступны отовсюду; все методы — виртуальные, т.е. перегружают базовые.</li></ol><p>Сегодня мы рассмотрим следующие аспекты объектно-ориентированного программирования.</p><ol><li>Что такое класс.</li><li>Атрибуты класса.</li><li>self.</li><li>Наследование.</li><li>ООП в действии: пример создания классов.</li></ol><h2 id="N10086" class="ibm-h2">1. Что такое класс</h2><p>Класс — это пользовательский тип. Простейшая модель определения класса выглядит следующим образом:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"> class имя_класса:
+ инструкция 1
+ .
+ инструкция №</pre></span><p>Каждая такая запись генерирует свой объект класса. Отличие от C++ в том, что в плюсах описание класса — это лишь объявление, а в питоне — это создание объекта. Есть также другой тип объекта — инстанс класса, который генерируется при вызове:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"> инстанс_класса = имя_класса()</pre></span><p>Объект класса и инстанс класса — это два разных объекта. Первый генерируется на этапе объявления класса, второй — при вызове имени класса. Объект класса может быть один, инстансов класса может быть сколько угодно.</p><p>Инструкция — это, как правило, определение функции. При определении класса создается новое пространство имен и создается объект-класс, который является оболочкой для всех инструкций. </p><p>Объекты классов поддерживают два вида операций: </p><ul class="ibm-bullet-list"><li>доступ к атрибутам;</li><li>создание экземпляра класса.</li></ul><h2 id="N100A2" class="ibm-h2"> 2. Атрибуты класса</h2><p>Атрибуты класса бывают двух видов:</p><ul class="ibm-bullet-list"><li>атрибуты данных;</li><li>атрибуты-методы.</li></ul><p>Атрибуты данных обычно записываются сверху. Память для атрибутов выделяется в момент их первого присваивания — либо снаружи, либо внутри метода. Методы начинаются со служебного слова def.</p><p>Доступ к атрибутам выполняется по схеме obj.attrname. </p><p>Пример.</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">class Simple:
+ u'Простой класс'
+ var = 87
+ def f(x):
+ return 'Hello world'</pre></span><p>Здесь Simple.var и Simple.f — пользовательские атрибуты. Есть также стандартные атрибуты:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; print Simple.__doc__</pre></span><p>Целое число</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; print Simple.var.__doc__
+int(x[, base]) -&gt; integer
+...</pre></span><p>Создание экземпляра класса похоже на то, как будто мы делаем вызов функций:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"> smpl = Simple()</pre></span><p>Будет создан пустой объект smpl. Если мы хотим, чтобы при создании выполнялись какие-то действия, нужно определить конструктор, который будет вызываться автоматически:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"> class Simple:
+ def __init__(self):
+ self.list = []</pre></span><p>При создании объекта smpl будет создан пустой список list. Конструктору можно передать аргументы:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"> class Simple:
+ def __init__(self, count, str):
+ self.list = []
+ self.count = count
+ self.str = str
+ 
+&gt;&gt;&gt; s = Simple(1,'22')
+&gt;&gt;&gt; s.count, s.str
+1 22</pre></span><p>Атрибут данных можно сделать приватным (private) — т.е. недоступным снаружи — для этого слева нужно поставить два символа подчеркивания:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">class Simple:
+ u'Простой класс с приватным атрибутом'
+ __private_attr = 10 
+ def __init__(self, count, str):
+ self.__private_attr = 20
+ print self.__private_attr
+ 
+s = Simple(1,'22')
+print s.__private_attr</pre></span><p>Последняя строка вызовет исключение — атрибут __private_attr годен только для внутреннего использования.</p><p>Методы необязательно определять внутри тела класса:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">def method_for_simple(self, x, y):
+ return x + y
+
+class Simple:
+ f = method_for_simple
+ 
+&gt;&gt;&gt; s = Simple()
+&gt;&gt;&gt; print s.f(1,2)
+3</pre></span><p>Пустой класс можно использовать в качестве заготовки для структуры данных:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">class Customer:
+ pass
+custom = Customer()
+custom.name = 'Вася'
+custom.salary = 100000</pre></span><h2 id="N100EA" class="ibm-h2">3. self</h2><p>Обычно первый аргумент в имени метода — self. Как говорит автор языка Гвидо Ван Россум, это не более чем соглашение: имя self не имеет абсолютно никакого специального значения. </p><p>self полезен для того, чтобы обращаться к другим атрибутам класса:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">class Simple:
+ def __init__(self):
+ self.list = []
+ def f1(self):
+ self.list.append(123)
+ def f2(self):
+ self.f1()
+ 
+&gt;&gt;&gt; s = Simple()
+&gt;&gt;&gt; s.f2()
+&gt;&gt;&gt; print s.list
+[123]</pre></span><p>Self — это аналог "this" в C++.</p><h2 id="N100F9" class="ibm-h2"> 4. Наследование</h2><p>Определение производного класса выглядит следующим образом:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"> class Derived(Base):</pre></span><p>Если базовый класс определен не в текущем модуле:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"> class Derived(module_name.Base):</pre></span><p>Разрешение имен атрибутов работает сверху вниз: если атрибут не найден в текущем классе, поиск продолжается в базовом классе, и так далее по рекурсии. Производные классы могут переопределить методы базовых классов — все методы являются в этом смысле виртуальными. Вызвать метод базового класса можно с префиксом:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"> Base.method()</pre></span><p>В питоне существует ограниченная поддержка множественного наследования:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"> class Derived(Base1,Base2,Base3):</pre></span><p>Поиск атрибута производится в следующем порядке:</p><ol><li>в Derived;</li><li>в Base1, затем рекурсивно в базовых классах Base1; </li><li>в Base2, затем рекурсивно в базовых классах Base2</li><li>и т.д.</li></ol><h2 id="N10121" class="ibm-h2">5. Пример</h2><p>Создадим два класса: Person — хранит общую информацию о людях — имя, профессия, зарплата; класс Manager — специализированный производный класс. В классе Person мы создадим свою версию для стандартной встроенной функции str, которая есть по умолчанию в любом питоновском классе — для этого она будет иметь префикс с двумя символами подчеркивания слева и справа. Когда мы попытаемся распечатать инстанс класса, будет вызвана __str__.</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;"># -*- coding: utf-8 -*-
+class Person:
+ def __init__(self, name, job=None, pay=0):
+ self.name = name
+ self.job = job
+ self.pay = pay
+ def lastName(self):
+ return self.name.split()[-1]
+ def giveRaise(self, percent):
+ self.pay = int(self.pay * (1 + percent))
+ def __str__(self):
+ return '[Person: %s, %s]' % (self.name, self.pay)
+
+class Manager(Person):
+ def __init__(self, name, pay): 
+ Person.__init__(self, name, 'mgr', pay) 
+ def giveRaise(self, percent, bonus=100):
+ Person.giveRaise(self, percent + bonus)</pre></span><p>Создаем первый инстанс класса Person:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; ivan = Person('Иван Petrov')</pre></span><p>Создаем второй инстанс класса Person:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; john = Person('John Sidorov', job='dev', pay=100000)</pre></span><p>Вызываем перегруженную функцию __str__;</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; print(ivan)
+&gt;&gt;&gt; print(john)</pre></span><p>Выводим фамилию:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; print(ivan.lastName(), john.lastName())</pre></span><p>Начисляем премиальные:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; john.giveRaise(.10)</pre></span><p>И получаем:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; print(john)</pre></span><p>Создаем инстанс класса Manager:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; tom = Manager('Tom Jones', 50000)</pre></span><p>Начисляем мегапремиальные:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">&gt;&gt;&gt; tom.giveRaise(.10)</pre></span><p>Выводим:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">print(tom.lastName())
+print(tom)</pre></span><p>Вывод:</p><span class="dw-code-nohighlight"><pre data-widget="syntaxhighlighter" class="brush: js; html-script: true; gutter: true;">[Person: Иван Petrov, 0]
+[Person: John Sidorov, 100000]
+('Petrov', 'Sidorov')
+[Person: John Sidorov, 110000]
+Jones
+[Person: Tom Jones, 5055000]</pre></span><h2 id="N10168" class="ibm-h2">Заключение</h2><p>Основные свойства ООП — полиморфизм, наследование, инкапсуляция. Класс — это пользовательский тип, состоящий из методов и атрибутов. Инстанс класса создается путем вызова имени класса как функции с параметрами. Объект состоит из атрибутов и методов. Атрибут — это переменная, метод — это функция. Отличия метода от функции в том, что у него есть первый параметр — self. Полиморфизм позволяет нам работать с различными типами объектов так, что нам не нужно задумываться о том, к какому типу они принадлежат. Объекты могут скрывать (инкапсулировать) свое внутреннее состояние. Это достигается за счет того, что доступ к атрибутам осуществляется не напрямую, а через методы. Класс может быть производным от одного или нескольких классов. Производный класс наследует все методы базового класса. Базовых классов может быть несколько. Объектный дизайн должен быть прозрачным, понятным и описан, что называется, в 'терминах человеческого языка'.</p><p>В <a href="../l-python_part_7">следующей статье</a> мы расскажем о работе со специальными методами и атрибутами классов. Код примеров проверялся на версии питона 2.6.</p><p><a href="../l-python_part_5">&lt; Предыдущая статья</a>. <a href="../l-python_part_7">Следующая статья &gt;</a></p><!--CMA ID: 512105--><!--Site ID: 40--><!--XSLT stylesheet used to transform this file:
+        dw-document-html-8.0.xsl-->
+                                        <!-- Article Quiz -->
+                                        
+                                        <!-- Article Resources -->
+                                        <div class="ibm-alternate-rule"><hr/></div><h4 id="artdownload" class="ibm-h4">Ресурсы для скачивания</h4><ul class="ibm-link-list"><li><a class="ibm-pdf-link" href="l-python_part_6-pdf.pdf">этот контент в PDF</a></li></ul>
+                                        <!-- Commenting -->
+<!-- INLINE_COMMENTS_BEGIN: -->
+<div class="ibm-alternate-rule"><hr/></div>
+<div id="dw-article-cmts-top" class="ibm-columns">
+    <div class="ibm-col-6-2">
+        <h4 id="icomments" class="ibm-h4">Комментарии</h4>
+        <div id="dw-article-cmts-login">
+            <p><a onClick="window.location=userLinks[0].url;" tabindex="0" role="link">Войдите</a> или 
+                <a onClick="window.location=userLinks[1].url;" tabindex="0" role="link">зарегистрируйтесь</a> для того чтобы оставлять комментарии или подписаться на них.</p>
+        </div>
+    </div>    
+    <div class="ibm-col-6-2" id="dw-notify"> 
+        <input type="checkbox" value="1" name="comment_notification" id="comment_notification" disabled="disabled">
+        <label for="comment_notification">Подпишите меня на уведомления к комментариям</label>	   
+    </div>
+</div>
+
+<div class="dw-article-cmts-container">       
+    <div class="ibm-no-print" id="dw-icomments-container">	
+        
+    </div>
+</div>
+<!-- INLINE_COMMENTS_END -->                                        <!-- CENTER_6_4_CONTENT_COLUMN_END -->
+                                    </div>   
+                                </div>
+                        <!--Rating_Meta_BEGIN--><div class="metavalue">static.content.url=http://www.ibm.com/developerworks/js/artrating/</div><div class="metavalue">SITE_ID=40</div><div class="metavalue">Zone=Open source, Linux</div><div class="metavalue">ArticleID=512105</div><div class="metavalue">ArticleTitle=Программирование на Python: Часть 6. Классы</div><div class="metavalue">publish-date=06022017</div><script language="javascript" type="text/javascript">document.write('<div class="metavalue">url='+location.href.replace(/</g,  '%3C')+'</div>');</script><!--Rating_Meta_END-->
+                    </div>
+                    <!-- END_IBM-CONTENT-MAIN -->
+                </div>
+                <!-- END_IBM-CONTENT-BODY -->
+            </div>
+            <!-- END_IBM-CONTENT -->
+        </div>
+        <!-- END_IBM-PCON -->
+    </main>
+    <!-- MAIN_CONTENT_END -->
+    
+    <!-- END_CONTENT-WRAPPER -->	
+</div>
+<!-- FOOTER_BEGIN -->
+<footer role="contentinfo" aria-label="IBM Developer">
+    <div id="dw-footer-module" class="dw-footer-home ibmdeveloper">
+        <section aria-label="Ресурсы" role="contentinfo">
+            <div class="ibm-columns">
+                <div class="ibm-col-6-1 dw-footer-col-1">
+                    <ul>
+                        <li class="dw-footer-heading" aria-label="IBM Developer"><a href="//www.ibm.com/developerworks/ru/">IBM <b>Developer</b></a></li>
+                        <li><a href="//www.ibm.com/developerworks/secure/feedback.jsp?domain=dwrussia">Помощь</a></li>
+                        <li class="dw-footer-newline"><a href="//www.ibm.com/developerworks/community/report?lang=ru">Сообщить о нарушениях</a></li>
+                        <li class="dw-footer-newline"><a href="//www.ibm.com/developerworks/ru/community/terms/thirdparty/">Уведомить сторонние ресурсы</a></li>
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-2">
+                    <ul class="dw-footer-lang" aria-label="Выбрать язык">
+                        <li class="dw-footer-heading">Выбрать язык</li>
+                        <li><a href="//developer.ibm.com">English</a></li>
+                        <li><a href="//www.ibm.com/developerworks/cn/" lang="zh">中文</a></li>
+                        <li><a href="//www.ibm.com/developerworks/jp/" lang="ja">日本語</a></li>
+                        <li><a href="//www.ibm.com/developerworks/ru/" lang="ru">Русский</a></li>
+                        <li class="dw-footer-newline"><a href="//www.ibm.com/developerworks/br/" lang="pt">Português (Brasil)</a></li>
+                        <li><a href="//www.ibm.com/developerworks/ssa/" lang="es">Español</a></li>
+                        <li><a href="//developer.ibm.com/kr/" lang="kr">한글</a></li>
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-3"> </div>
+                <div class="ibm-col-6-1 dw-footer-col-4"> </div>
+                <div class="ibm-col-6-1 dw-footer-col-5">
+                    <ul class="dw-footer-categories">
+                        <li class="dw-footer-category">
+                            <a href="//www.ibm.com/developerworks/ru/rss/">Ленты</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="//www.ibm.com/developerworks/ru/doc/">Библиотека документов</a>  
+                        </li>
+                    </ul>
+                </div>
+                <div class="ibm-col-6-1 dw-footer-col-6">
+                    <ul class="dw-footer-categories">
+                        <li class="dw-footer-category">
+                            <a href="//developer.ibm.com/newsletters/">Рассылка (Английский)</a>  
+                        </li>
+                        <li class="dw-footer-category">
+                            <a href="//www.ibm.com/developerworks/ru/downloads/">Пробное ПО</a>  
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div id="dw-footer" class="ibm-padding-normal ibm-alternate">
+        <div class="ibm-columns">
+            <div class="ibm-col-1-1">
+                <div class="dw-footer-corporate-links">
+                    <ul>
+                        <li><a href="//www.ibm.com/contact/ru/ru/">Контактная информация</a></li>
+                        <li><a href="//www.ibm.com/privacy/ru/ru/">Конфиденциальность</a></li>
+                        <li><a href="//www.ibm.com/developerworks/ru/community/terms/use/">Условия использования</a></li>
+                        <li><a href="//www.ibm.com/accessibility/ru/ru/">Специальные возможности</a></li>
+                        <li class="ibm-feedbacklink"><a href="#">Комментарии</a></li>
+                        <li id="ibm-truste-cp"><a onclick="truste.eu.clickListener();return false;" href="#">Настройки файлов cookie</a></li>
+                    </ul>                 
+                </div>
+                <div id="ibm-footer-locale-selector"></div>
+            </div>
+        </div>
+    </div>        
+</footer> <!-- FOOTER_END -->
+
+<!-- END_IBM-TOP -->
+</div>
+
+<!-- SCRIPTS_INCLUDE_BEGIN -->
+<!-- Styles -->
+<link rel="stylesheet" type="text/css" href="/developerworks/maverick/css/plugin/comments/jquery-comments.css">
+<link rel="stylesheet" href="/developerworks/maverick/fonts/awesome-4.5.0/css/font-awesome.min.css">
+
+<!-- Libraries -->
+<script type="text/javascript" src="/developerworks/maverick/js/plugin/comments/jquery-comments.min.js"></script>
+<script type="text/javascript" src="/developerworks/maverick/js/plugin/formatter/moment-with-locales.js"></script>
+<script type="text/javascript" src="/developerworks/maverick/js/ContentComments.js"></script>
+<script type="text/javascript" src="/developerworks/js/v18/ContentCommentsFormatter.js"></script>
+<script type="text/javascript" language="JavaScript">
+
+	IBMCore.common.module.masthead.subscribe("ready", "customjs", setupCommentsPlugin).runAsap(setupCommentsPlugin);
+
+	function setupCommentsPlugin(){
+		//debugger;
+			//alert(userLinks);
+			var commentsInitInfo = {
+				contentId : $("div[class=metavalue]:contains('ArticleID=')").text().split("=")[1],
+				siteId :  $("div[class=metavalue]:contains('SITE_ID=')").text().split("=")[1],
+				pluginDivId : '#dw-icomments-container',
+				notifyElementId : "#comment_notification",
+				loginMessageDivId : "#dw-article-cmts-login",
+				totalCommentsDivId : "#nCmts",
+						isIdea:false
+
+			};				
+								
+			ContentComments.Setup(commentsInitInfo);
+	}
+</script>
+
+<!-- SCRIPTS_INCLUDE_END -->
+
+</body>
+</html>

@@ -10,11 +10,11 @@ class Request(models.Model):
 	def __str__(self):
 		return self.url
 
-	def is_success(self): # to-do
+	def is_success(self):
 		now = datetime.now(timezone.utc)
-		if now < self.handling_time:
+		if self.handling_time > now:
 			return None
-		return ParseResult.objects.filter(pk=1).exists()
+		return ParseResult.objects.filter(request=self).exists()
 
 	is_success.short_description = 'success'
 	is_success.boolean = True
