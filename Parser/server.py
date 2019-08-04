@@ -29,8 +29,8 @@ def parse(url):
 	except:
 		return None
 	encode = re.search("<meta charset=\"([^>]+)\"", str(html))
-	title = re.search("<title>(.*)</title>", str(html))
-	h1 = re.search("<h1>(.*)</h1>", str(html))
+	title = re.search("<title[^>]>(.*)</title>", str(html))
+	h1 = re.search("<h1[^>]>(.*)</h1>", str(html))
 	output = {}
 	output['h1'] = h1.group(1) if h1 is not None else ''
 	output['title'] = title.group(1) if title is not None else ''
