@@ -2,21 +2,21 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<title>Parser</title>
 </head>
 <body>
 <textarea rows="10" cols="50" disabled>
 {% for request in requests %}
-{{ request.handling_time|date:"d.m.Y h:m:s" }}:&nbsp;{{ request.url }}&nbsp;{{ request.is_success }}&#13;
+<{{ request.handling_time|date:"d.m.Y h:m:s" }}>:&nbsp;{{ request.url }}&nbsp;{% if request.is_success == True %}SUCCESS{% elif request.is_success == False %}FAILED{% else %}UNKNOWN{{% endif %}&#13;
 {% empty %}
 No requests
 {% endfor %}
 </textarea>
 <textarea rows="10" cols="50" disabled>
 {% for result in results %}
-{{ result.request.url }}
-{% if not result.is_empty %}
-&nbsp;-&nbsp;{{ result.encoding }},&nbsp;{{ result.title }},&nbsp;{{ result.h1 }}
+{{ result.request.url }}{% if not result.is_empty %}&nbsp;-&nbsp;encoding:&nbsp;{{ result.encoding }},&nbsp;title:&nbsp;{{ result.title }},&nbsp;<h1>:&nbsp;{{ result.h1 }}
 {% endif %}
 {% empty %}
 No results

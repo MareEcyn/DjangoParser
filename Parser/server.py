@@ -1,10 +1,11 @@
-import re
 import sys
 import socket
 import threading
 import json
-import urllib.request as request
 from datetime import datetime
+
+from parser import parse
+
 
 def handle(request):
 	"""
@@ -15,41 +16,16 @@ def handle(request):
 	data_byte = bytes(data_str, 'cp1251')
 	return data_byte
 
-
-def parse(url):
-	"""
-	Parse given URL and return dictionary of strings (empty string if particular element does not exist).
-	Return None for any urllib error.
-	"""
-	url = url.decode("utf-8")
-	html = ''
-	try:
-		with request.urlopen(url) as response:
-			html = response.read()
-	except:
-		return None
-	encode = re.search("<meta charset=\"([^>]+)\"", str(html))
-	title = re.search("<title[^>]>(.*)</title>", str(html))
-	h1 = re.search("<h1[^>]>(.*)</h1>", str(html))
-	output = {}
-	output['h1'] = h1.group(1) if h1 is not None else ''
-	output['title'] = title.group(1) if title is not None else ''
-	output['encode'] = encode.group(1) if encode is not None else ''
-	return output
-
-
 class BaseServer:
 	"""
 	Very simple threading TCP server.
 	"""
-
-	def run(self, ip='', port=81, maxclients=10):
+	def run(self, ip='', port=81, maxclients=100):
 		serv_sock = self.__create_serv_sock(ip, port, maxclients)
-		cid = 0 # client ordering identifier
+		cid = 0 # client identifier
 		print(f'[Server on {port} port started]\n[Press CTRL+C for exit]')
 		while True:
 			client_sock = self.__handle_client_conn(serv_sock, cid)
-			# self.__serve_client(client_sock, cid)
 			thread = threading.Thread(target=self.__serve_client, args=(client_sock, cid))
 			thread.start()
 			cid += 1
