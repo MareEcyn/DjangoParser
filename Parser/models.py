@@ -1,17 +1,20 @@
+import django.dispatch
+import time
 from datetime import datetime, timezone
-
 from django.db import models
 
 
 class Request(models.Model):
 	url = models.URLField('parsing URL')
-	handling_time = models.DateTimeField('handling time', default=datetime.now())
+	# handling_time = models.DateTimeField('handling time', default=datetime.now(timezone.utc))
+	handling_time = models.DateTimeField('handling time', default=django.utils.timezone.now)
 
 	def __str__(self):
 		return self.url
 
 	def is_success(self):
-		now = datetime.now(timezone.utc)
+		# now = datetime.now(timezone.utc)
+		now = django.utils.timezone.now()
 		if self.handling_time > now:
 			return None
 		return ParseResult.objects.filter(request=self).exists()

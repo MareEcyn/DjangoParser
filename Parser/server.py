@@ -1,4 +1,3 @@
-
 import re
 import sys
 import socket
@@ -6,10 +5,6 @@ import threading
 import json
 import urllib.request as request
 from datetime import datetime
-
-# TODO:
-# how to stop server from code?
-# make server as singletone?
 
 def handle(request):
 	"""
@@ -29,7 +24,7 @@ def parse(url):
 	url = url.decode("utf-8")
 	html = ''
 	try:
-		with request.urlopen(url) as response: # valid check, exceptions catch
+		with request.urlopen(url) as response:
 			html = response.read()
 	except:
 		return None
@@ -45,10 +40,10 @@ def parse(url):
 
 class BaseServer:
 	"""
-	Very simple threading TCP server, w/ hardcoded request handler.
+	Very simple threading TCP server.
 	"""
 
-	def run(self, ip='', port=80, maxclients=10):
+	def run(self, ip='', port=81, maxclients=10):
 		serv_sock = self.__create_serv_sock(ip, port, maxclients)
 		cid = 0 # client ordering identifier
 		print(f'[Server on {port} port started]\n[Press CTRL+C for exit]')
@@ -107,5 +102,7 @@ if __name__ == '__main__':
 	try:
 		BaseServer().run()
 	except KeyboardInterrupt:
-		print('Server stopped\r')
+		print('[Server stopped]\r')
 		sys.exit()
+	except OSError as error:
+		print(error)
