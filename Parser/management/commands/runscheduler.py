@@ -1,13 +1,10 @@
 import sched
 import time
 import datetime
-import threading
 import socket
 import ast
-import json
 import sys
 
-import django
 from django.core.management.base import BaseCommand
 from Parser.models import Request, ParseResult
 

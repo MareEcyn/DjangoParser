@@ -1,5 +1,4 @@
 import subprocess
-import sys
 
 if __name__ == '__main__':
 	subprocess.Popen(['python manage.py runserver'], shell=True)

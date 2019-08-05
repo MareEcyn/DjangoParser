@@ -1,5 +1,3 @@
-from datetime import datetime, timezone
-
 import django.dispatch
 from django.db import models
 
