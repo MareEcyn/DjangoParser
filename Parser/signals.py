@@ -5,12 +5,12 @@ from django.dispatch import receiver
 from .models import Request
 
 
-callback_uid = uuid.uuid4()
+UID = uuid.uuid4()
 
-@receiver(post_save, sender=Request, dispatch_uid=callback_uid)
+@receiver(post_save, sender=Request, dispatch_uid=UID)
 def handle_add_request(sender, **kwargs):
-	print(f'{sender.objects.last().handling_time}')
+	pass
 
-@receiver(pre_delete, sender=Request, dispatch_uid=callback_uid)
+@receiver(pre_delete, sender=Request, dispatch_uid=UID)
 def handle_del_request(sender, **kwargs):
-	print(f'sender url: {sender.url}')
+	pass

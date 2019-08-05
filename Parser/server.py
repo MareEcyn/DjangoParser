@@ -17,7 +17,7 @@ def handle(request):
 
 class BaseServer:
 	"""
-	Very simple threading TCP server.
+	Dummy threading TCP server.
 	"""
 	def run(self, ip='', port=81, maxclients=100):
 		serv_sock = self.__create_serv_sock(ip, port, maxclients)
