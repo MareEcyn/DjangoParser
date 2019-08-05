@@ -34,7 +34,11 @@ def update_model(model_obj, data):
 			title=data['title'],
 			h1=data['h1'])
 
-def handle(request):
+def get_response(request):
+	"""
+	Manage one cycle of data swop in client-server system.
+	Return: bytes object
+	"""
 	global SOCK
 	SOCK = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
@@ -46,6 +50,13 @@ def handle(request):
 	SOCK.sendall(bytes(request, 'cp1251'))
 	response = SOCK.recv(1024)
 	SOCK.close()
+	return response
+
+def handle(request):
+	"""
+	Execute model update logic.
+	"""
+	response = get_response(request)
 	if response == b'null' or response == b'':
 		return
 	response = response.decode('utf-8')
@@ -70,7 +81,7 @@ def load_events(with_old):
 		add_event(r.url, r.handling_time)
 
 class Command(BaseCommand):
-	help = 'Shedule requests to server and manage DB update from response.'
+	help = 'Shedule requests to server and manage model update based on response.'
 
 	def handle(self, *args, **kwargs):
 		load_events(with_old=True)

@@ -10,7 +10,6 @@ from parser import parse
 def handle(request):
 	"""
 	Layer between server and business logic.
-	Arg: [request] - string of bytes.
 	"""
 	data_str = json.dumps(parse(request))
 	data_byte = bytes(data_str, 'cp1251')
